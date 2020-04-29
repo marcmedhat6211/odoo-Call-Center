@@ -15,6 +15,8 @@ class Calls(models.Model):
     source = fields.Char()
     destination = fields.Char()
     name = fields.Char(default='New')
+    station = fields.Many2one(comodel_name='iti.lab1.station')
+    tags = fields.Many2many(comodel_name='iti.lab1.tags')
 
     @api.constrains('stop_time')
     def check_stop_time(self):
@@ -26,3 +28,15 @@ class Calls(models.Model):
     def _compute_duration(self):
         for rec in self:
             rec.duration = (rec.stop_time - rec.start_time).seconds / 60
+
+
+class Station(models.Model):
+    _name = 'iti.lab1.station'
+
+    name = fields.Char()
+    calls = fields.One2many(comodel_name='iti.lab1.calls',inverse_name='station')
+
+class Tags(models.Model):
+    _name = 'iti.lab1.tags'
+
+    name = fields.Char()
