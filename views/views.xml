@@ -1,6 +1,6 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
+<!-- explicit list view definition -->
     <record model="ir.ui.view" id="odoo_lab1.list">
       <field name="name">odoo_lab1 list</field>
       <field name="model">iti.lab1.calls</field>
@@ -11,16 +11,62 @@
           <field name="stop_time"/>
           <field name="source"/>
           <field name="destination"/>
-          <field name="duration"/>
+          <field name="duration" widget="float_time"/>
         </tree>
       </field>
     </record>
 
-    <!-- actions opening views on models -->
+<!--    Form View-->
+    <record model="ir.ui.view" id="odoo_lab1.form">
+      <field name="name">odoo_lab1 list</field>
+      <field name="model">iti.lab1.calls</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <h1>
+                <field name="name"/>
+              </h1>
+              <field name="start_time"/>
+              <field name="stop_time"/>
+              <field name="source"/>
+              <field name="destination"/>
+              <field name="duration" widget="float_time"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+<!--    Calendar View-->
+    <record model="ir.ui.view" id="odoo_lab1.calendar">
+      <field name="name">odoo_lab1 list</field>
+      <field name="model">iti.lab1.calls</field>
+      <field name="arch" type="xml">
+        <calendar date_start="start_time" date_stop="stop_time">
+          <field name="destination"/>
+          <field name="duration" widget="float_time"/>
+        </calendar>
+      </field>
+    </record>
+
+<!--    Graph View-->
+    <record model="ir.ui.view" id="odoo_lab1.graph">
+      <field name="name">odoo_lab1 list</field>
+      <field name="model">iti.lab1.calls</field>
+      <field name="arch" type="xml">
+        <graph>
+          <field name="start_time"/>
+          <field name="duration" type="measure"/>
+        </graph>
+      </field>
+    </record>
+
+<!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="odoo_lab1.action_window">
       <field name="name">odoo_lab1 window</field>
       <field name="res_model">iti.lab1.calls</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,calendar,graph</field>
     </record>
 
     <!-- Top menu item -->
@@ -29,7 +75,7 @@
     <!-- menu categories -->
     <menuitem name="Calls" id="odoo_lab1.menu_1" parent="odoo_lab1.menu_root"/>
 
-    <!-- actions -->
+<!-- actions -->
     <menuitem name="List" id="odoo_lab1.menu_1_list" parent="odoo_lab1.menu_1"
               action="odoo_lab1.action_window"/>
   </data>
