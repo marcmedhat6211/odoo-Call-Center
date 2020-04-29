@@ -28,6 +28,7 @@
         'views/views.xml',
         'views/station.xml',
         'views/templates.xml',
+        'reports/report_calls.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

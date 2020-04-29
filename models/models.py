@@ -10,7 +10,6 @@ class Calls(models.Model):
     start_time = fields.Datetime()
     stop_time = fields.Datetime()
     duration = fields.Float(compute='_compute_duration',store=True)
-    # duration = fields.Float(store=True)
     source = fields.Char()
     destination = fields.Char()
     name = fields.Char(default='New')
@@ -30,8 +29,9 @@ class Calls(models.Model):
     @api.depends('start_time','stop_time')
     def _compute_duration(self):
         for rec in self:
-            rec.duration = (rec.stop_time - rec.start_time).seconds / 60
-
+            rec.duration = 0.0
+            if rec.stop_time and rec.start_time:
+                rec.duration = (rec.stop_time - rec.start_time).seconds / 60
 
 class Station(models.Model):
     _name = 'iti.lab1.station'
