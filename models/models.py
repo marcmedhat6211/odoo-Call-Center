@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
@@ -17,6 +16,10 @@ class Calls(models.Model):
     name = fields.Char(default='New')
     station = fields.Many2one(comodel_name='iti.lab1.station')
     tags = fields.Many2many(comodel_name='iti.lab1.tags')
+    state = fields.Selection([
+        ('draft','Draft'),
+        ('invoiced','Invoiced'),
+    ] , default='draft' , string='Status')
 
     @api.constrains('stop_time')
     def check_stop_time(self):
@@ -35,6 +38,7 @@ class Station(models.Model):
 
     name = fields.Char()
     calls = fields.One2many(comodel_name='iti.lab1.calls',inverse_name='station')
+
 
 class Tags(models.Model):
     _name = 'iti.lab1.tags'

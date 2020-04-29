@@ -9,6 +9,7 @@
           <field name="name"/>
           <field name="start_time"/>
           <field name="stop_time"/>
+          <field name="station"/>
           <field name="source"/>
           <field name="destination"/>
           <field name="duration" widget="float_time"/>
@@ -18,10 +19,13 @@
 
 <!--    Form View-->
     <record model="ir.ui.view" id="odoo_lab1.form">
-      <field name="name">odoo_lab1 list</field>
+      <field name="name">odoo_lab1 form</field>
       <field name="model">iti.lab1.calls</field>
       <field name="arch" type="xml">
         <form>
+          <header>
+            <field name="state" widget="statusbar" options="{'clickable' : '1'}"/>
+          </header>
           <sheet>
             <group>
               <h1>
@@ -29,9 +33,11 @@
               </h1>
               <field name="start_time"/>
               <field name="stop_time"/>
+              <field name="station"/>
               <field name="source"/>
               <field name="destination"/>
               <field name="duration" widget="float_time"/>
+              <field name="tags" widget="many2many_tags"/>
             </group>
           </sheet>
         </form>
@@ -62,17 +68,59 @@
       </field>
     </record>
 
+<!--    Kanban View-->
+    <record model="ir.ui.view" id="odoo_lab1.kanban">
+      <field name="name">odoo_lab1 kanban</field>
+      <field name="model">iti.lab1.calls</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="name"/>
+          <field name="start_time"/>
+          <field name="stop_time"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click">
+                <strong><field name="name"/></strong>
+                <field name="start_time"/>
+                <field name="stop_time"/>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+<!--    Search View-->
+    <record model="ir.ui.view" id="odoo_lab1.search">
+      <field name="name">odoo_lab1 search</field>
+      <field name="model">iti.lab1.calls</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="station"/>
+          <field name="name"/>
+          <field name="source"/>
+          <field name="destination"/>
+          <filter name="current_month" string="Start Time" date="start_time"/>
+          <filter name="invoiced" string="Invoiced" domain="[('state','=','invoiced')]"/>
+          <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+          <group>
+            <filter name="group_by_state" string="Status" context="{'group_by' : 'state'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
 <!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="odoo_lab1.action_window">
       <field name="name">odoo_lab1 window</field>
       <field name="res_model">iti.lab1.calls</field>
-      <field name="view_mode">tree,form,calendar,graph</field>
+      <field name="view_mode">tree,form,kanban,calendar,graph</field>
     </record>
 
-    <!-- Top menu item -->
+<!-- Top menu item -->
     <menuitem name="Call Center" id="odoo_lab1.menu_root"/>
 
-    <!-- menu categories -->
+<!-- menu categories -->
     <menuitem name="Calls" id="odoo_lab1.menu_1" parent="odoo_lab1.menu_root"/>
 
 <!-- actions -->
