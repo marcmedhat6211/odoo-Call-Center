@@ -36,9 +36,18 @@ class Calls(models.Model):
                 rec.duration = (rec.stop_time - rec.start_time).seconds / 60
 
     def create_invoice(self):
-            invoice_obj = self.env['account.move'].create({
+        invoice_obj = self.env['account.move'].create({
                 'partner_id' : self.partner_id.id,
-            })
+                'type' : 'out_invoice',
+        })
+        invoice_line_obj = self.env['account.move.line'].create({
+            'name' : 'call cost',
+            'move_id' : invoice_obj.id,
+            'price_unit' : self.duration * 0.30,
+            'account_id' : self.partner_id.property_account_receivable_id.id,
+        })
+
+
 #===================================================================================
 ##**STATION MODEL**##
 class Station(models.Model):
