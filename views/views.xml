@@ -24,6 +24,7 @@
       <field name="arch" type="xml">
         <form>
           <header>
+            <button name="create_invoice" string="Create Invoice" type="object"/>
             <field name="state" widget="statusbar" options="{'clickable' : '1'}"/>
           </header>
           <sheet>
@@ -31,6 +32,7 @@
               <h1>
                 <field name="name"/>
               </h1>
+              <field name="partner_id"/>
               <field name="start_time"/>
               <field name="stop_time"/>
               <field name="station"/>

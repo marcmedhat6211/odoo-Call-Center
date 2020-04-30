@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+##*IMPORTS*##
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
-
+#===================================================================================
+##**CALLS MODEL**##
 class Calls(models.Model):
     _name = 'iti.lab1.calls'
     _description = 'CDR'
@@ -19,6 +20,7 @@ class Calls(models.Model):
         ('draft','Draft'),
         ('invoiced','Invoiced'),
     ] , default='draft' , string='Status')
+    partner_id = fields.Many2one(comodel_name="res.partner")
 
     @api.constrains('stop_time')
     def check_stop_time(self):
@@ -33,13 +35,19 @@ class Calls(models.Model):
             if rec.stop_time and rec.start_time:
                 rec.duration = (rec.stop_time - rec.start_time).seconds / 60
 
+    def create_invoice(self):
+            invoice_obj = self.env['account.move'].create({
+                'partner_id' : self.partner_id.id,
+            })
+#===================================================================================
+##**STATION MODEL**##
 class Station(models.Model):
     _name = 'iti.lab1.station'
 
     name = fields.Char()
     calls = fields.One2many(comodel_name='iti.lab1.calls',inverse_name='station')
-
-
+#===================================================================================
+##**TAGS MODEL**##
 class Tags(models.Model):
     _name = 'iti.lab1.tags'
 
